@@ -6,7 +6,7 @@
 
   - Flask
 
-  - FastAPI
+  - FastAPI [x]
 
   - All of the above
 
@@ -16,7 +16,7 @@
 
   - Flask outperforms Django and FastAPI.
 
-  - FastAPI is renowned for its increased speed and performance compared with Django and Flask.
+  - FastAPI is renowned for its increased speed and performance compared with Django and Flask. [x]
 
   - Django, Flask and FastAPI have equivalent performance.
 
@@ -26,13 +26,13 @@
 
   - A breakpoint in the code where the API can be interrupted.
 
-  - A specific URL to which a request can be sent to interact with the API.
+  - A specific URL to which a request can be sent to interact with the API. [x]
 
   - A unique identifier assigned to each incoming request.
 
 - **Question 4:** _What are the main HTTP verbs used to define REST API methods?_
 
-  - GET, POST, PUT, PATCH, DELETE
+  - GET, POST, PUT, PATCH, DELETE [x]
 
   - SEND, RECEIVE, UPDATE, REMOVE
 
@@ -46,7 +46,7 @@
 
   - An external library used to speed up API development.
 
-  - Intermediate software that processes the request before it reaches the main application.
+  - Intermediate software that processes the request before it reaches the main application. [x]
 
   - A method for securing data stored in the database.
 
@@ -56,7 +56,7 @@
 
   - PyJSON
 
-  - json.dumps() and json.loads()
+  - json.dumps() and json.loads() [x]
 
   - serializeJSON
 
@@ -64,17 +64,17 @@
 
   - Create a new resource.
 
-  - Update an existing resource, or create one if it doesn't exist.
+  - Update an existing resource, or create one if it doesn't exist. [x]
 
   - Delete a resource.
 
-  - Read a specific resource.
+  - Read a specific resource. 
 
 - **Question 8:** In FastAPI, how do you define an endpoint to handle a POST request with JSON data?\*
 
-  - @app.post("/endpoint")
+  - @app.post("/endpoint") [x]
 
-  - @app.get("/endpoint")
+  - @app.get("/endpoint") 
 
   - @app.request("/endpoint")
 
@@ -96,13 +96,13 @@ REST (Representational State Transfer) is an architectural style for designing n
 
 - **Stateless:** Each request from a client contains all the information needed to understand and fulfill the request.
 
-### Key Concepts in FastAPI:
+  ### Key Concepts in FastAPI:
 
-- **Endpoint:**
+  - **Endpoint:** 
 
-- **Basic HTTP Methods:**
+  - **Basic HTTP Methods:** 
 
-- **Request and Response:**
+  - **Request and Response:**
 
 ### Evaluation requirements
 
@@ -123,13 +123,13 @@ About the API workflow:
 - The routers file contains the declaration of all API routes by tags 
 - The Services folder must contain the functions that are called in the route declaration
 
-- **Step 1: Installing libraries:** Install the libraries in the requirements.txt
+- **Step 1: Installing libraries:** Install the libraries in the requirements.txt [x]
 
-- **Step 2: First launch:**  Execute the main.py file in the root folder and access it.
+- **Step 2: First launch:**  Execute the main.py file in the root folder and access it. [x]
 
-- **Step 3: Redirect root API:**  Redirect the root endpoint of your API to the automatic swagger documentation
+- **Step 3: Redirect root API:**  Redirect the root endpoint of your API to the automatic swagger documentation [x]
 
-- **Step 4: Access the swagger documentation:**  Access to the swagger built automatically by FastAPI
+- **Step 4: Access the swagger documentation:**  Access to the swagger built automatically by FastAPI [x]
 
 - **Step 5: First call to the API:**  Make an API request on the hello route using the swagger directly or a tool like insomnia or postman
 
