@@ -216,3 +216,37 @@ async def get_model_parameters():
         # Log the error message for debugging purposes
         print(f"Error loading model parameters: {e}")
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
+    
+# Step 15: Update and add Firestore parameters (tested with insomnia)
+
+@router.post("/update-model-parameters", response_model=Dict[str, Any])
+async def update_model_parameters(parameters: Dict[str, Any]):
+    try:
+        db = firestore.client()
+
+        # Récupérer le document 'parameters' de la collection Firestore
+        parameters_ref = db.collection('parameters').document('parameters')
+        parameters_ref.update(parameters)
+
+        return {"message": "Model parameters updated successfully", "parameters": parameters_ref.get().to_dict()}
+
+    except Exception as e:
+        # Log the error message for debugging purposes
+        print(f"Error updating model parameters: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
+
+@router.post("/add-model-parameters", response_model=Dict[str, Any])
+async def add_model_parameters(parameters: Dict[str, Any]):
+    try:
+        db = firestore.client()
+
+        # Récupérer le document 'parameters' de la collection Firestore
+        parameters_ref = db.collection('parameters').document('parameters')
+        parameters_ref.set(parameters, merge=True)
+
+        return {"message": "Model parameters added successfully", "parameters": parameters_ref.get().to_dict()}
+
+    except Exception as e:
+        # Log the error message for debugging purposes
+        print(f"Error adding model parameters: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
