@@ -12,9 +12,16 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 import joblib
 import json
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 router = APIRouter()
 
+# Initialize Firebase app only once
+if not firebase_admin._apps:
+    cred_path = r"C:\Users\justi\OneDrive - Fondation EPF\Documents\5A semestre 1 EPF\Data sources\repo\api-webscrapping-e7967-firebase-adminsdk-tiigz-02eaac3e18.json"
+    cred = credentials.Certificate(cred_path)
+    firebase_admin.initialize_app(cred)
 
 # Step 7 : define the endpoint to load the dataset and return it as a JSON response
 @router.get("/load-iris-dataset", response_model=dict)
@@ -187,4 +194,25 @@ async def predict_iris():
     except Exception as e:
         # Log the error message for debugging purposes
         print(f"Error predicting with model: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
+    
+# Step 14: Retrieve parameters from Firestore
+@router.get("/get-model-parameters", response_model=Dict[str, Any])
+async def get_model_parameters():
+    try:
+        db = firestore.client()
+
+        # Récupérer le document 'parameters' de la collection Firestore
+        parameters_ref = db.collection('parameters').document('parameters')
+        doc = parameters_ref.get()
+
+        if doc.exists:
+            return {"parameters": doc.to_dict()}
+        else:
+            raise HTTPException(status_code=404, detail="Parameters document not found")
+
+    
+    except Exception as e:
+        # Log the error message for debugging purposes
+        print(f"Error loading model parameters: {e}")
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
