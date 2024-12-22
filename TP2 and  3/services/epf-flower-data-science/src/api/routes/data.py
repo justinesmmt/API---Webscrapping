@@ -8,6 +8,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelEncoder
 from typing import List
 from typing import Dict, Any
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+import joblib
+import json
 
 router = APIRouter()
 
@@ -116,4 +120,47 @@ async def split_iris_data(test_size: float = 0.2):
     except Exception as e:
         # Log the error message for debugging purposes
         print(f"Error splitting dataset: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
+    
+# Step 11: Training the classification model and save the model in src/models
+@router.get("/train-iris-model", response_model=Dict[str, Any])
+async def train_iris_model():
+    try:
+        output_dir = r"TP2 and  3\services\epf-flower-data-science\src\models"
+        X_train_path = r"TP2 and  3\services\epf-flower-data-science\src\data\Iris\X_train.csv"
+        y_train_path = r"TP2 and  3\services\epf-flower-data-science\src\data\Iris\y_train.csv"
+        model_path = r"TP2 and  3\services\epf-flower-data-science\src\config\model_parameters.json"
+
+        # Load the training data
+        X_train = pd.read_csv(X_train_path)
+        y_train = pd.read_csv(y_train_path)
+        print("Shape of X_train:", X_train.shape)
+        print("Shape of y_train:", y_train.shape)
+        print("Missing values in X_train:", X_train.isnull().sum().sum())
+        print("Missing values in y_train:", y_train.isnull().sum().sum())
+
+        # Get the model parameters in the json file
+        with open(model_path, 'r') as file:
+            params = json.load(file)
+
+        
+
+        # Initialize the model
+        model = LogisticRegression(**params['parameters'])
+        print(model.get_params())
+
+        # Train the model
+        model.fit(X_train, y_train.values.ravel())
+
+        # Save the model
+        model_path = os.path.join(output_dir, "iris_classifier.joblib")
+        joblib.dump(model, model_path)
+
+        return {"message": "Model trained and saved successfully", "model_path": model_path}
+
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+    except Exception as e:
+        # Log the error message for debugging purposes
+        print(f"Error training model: {e}")
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
