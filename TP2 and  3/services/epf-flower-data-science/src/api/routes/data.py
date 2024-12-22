@@ -164,3 +164,27 @@ async def train_iris_model():
         # Log the error message for debugging purposes
         print(f"Error training model: {e}")
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
+    
+# Step 12: Prediction with Trained Model and send back the predictions as json
+@router.get("/predict-iris", response_model=Dict[str, Any])
+async def predict_iris():
+    try:
+        model_path = r"TP2 and  3\services\epf-flower-data-science\src\models\iris_classifier.joblib"
+        model = joblib.load(model_path)
+        X_test_path = r"TP2 and  3\services\epf-flower-data-science\src\data\Iris\X_test.csv"
+
+        # Load the X_test data
+        X_test = pd.read_csv(X_test_path)
+
+        # Make predictions
+        predictions = model.predict(X_test)
+
+        # Return the predictions
+        return {"predictions": predictions.tolist()}
+
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Model not found")
+    except Exception as e:
+        # Log the error message for debugging purposes
+        print(f"Error predicting with model: {e}")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
