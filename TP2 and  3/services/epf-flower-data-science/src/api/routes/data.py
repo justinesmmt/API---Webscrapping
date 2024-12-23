@@ -26,6 +26,21 @@ if not firebase_admin._apps:
 # Step 7 : define the endpoint to load the dataset and return it as a JSON response
 @router.get("/load-iris-dataset", response_model=dict)
 async def get_iris_data():
+    """
+  Endpoint to load the Iris dataset and return it as a JSON response.
+
+  This endpoint reads the Iris dataset from a CSV file, converts it
+  to JSON format, and returns the data as a dictionary.
+
+  Args:
+      None
+
+  Returns:
+      dict: A dictionary containing the dataset as a JSON object.
+
+  Raises:
+      HTTPException: If the dataset file is not found (404) or any other error occurs (500).
+"""
     try:
         # Path to the dataset file
         dataset_path = r"TP2 and  3\services\epf-flower-data-science\src\data\Iris\Iris.csv"
@@ -45,6 +60,22 @@ async def get_iris_data():
 # Step 8: Processing the Iris dataset (encoding, scaling, etc.)
 @router.get("/process-iris-dataset", response_model=Dict[str, Any])
 async def process_iris_data():
+    """
+  Endpoint to process the Iris dataset.
+
+  This endpoint loads the Iris dataset from a CSV file, preprocesses it by
+  dropping missing values and the 'Id' column, label-encoding the 'Species'
+  column, and saves the cleaned dataset to a new CSV file.
+
+  Args:
+      None
+
+  Returns:
+      dict: A dictionary containing a success message and the processed data.
+
+  Raises:
+      HTTPException: If the dataset file is not found (404) or if any other error occurs (500).
+"""
     try:
         dataset_path = r"TP2 and  3\services\epf-flower-data-science\src\data\Iris\Iris.csv"
         
@@ -83,6 +114,23 @@ async def process_iris_data():
 # Step 9: Splitting the Iris dataset into training and testing sets and return as json
 @router.get("/split-iris-dataset", response_model=Dict[str, Any])
 async def split_iris_data(test_size: float = 0.2):
+    """
+  Endpoint to split the Iris dataset into training and testing sets.
+
+  This endpoint loads the preprocessed Iris dataset, splits it into
+  features (`X`) and labels (`y`), then divides the data into training
+  and testing sets using a specified test size. The split datasets are
+  saved as separate CSV files for further use.
+
+  Args:
+      test_size (float, optional): The proportion of the dataset to include in the test split. Defaults to 0.2.
+
+  Returns:
+      dict: A dictionary containing a success message and the training and testing datasets in JSON format.
+
+  Raises:
+      HTTPException: If the dataset file is not found (404) or if any other error occurs (500).
+"""
     try:
         output_dir = r"TP2 and  3\services\epf-flower-data-science\src\data\Iris"
         dataset_path = r"TP2 and  3\services\epf-flower-data-science\src\data\Iris\Iris_preprocessed.csv"
@@ -132,6 +180,22 @@ async def split_iris_data(test_size: float = 0.2):
 # Step 11: Training the classification model and save the model in src/models
 @router.get("/train-iris-model", response_model=Dict[str, Any])
 async def train_iris_model():
+    """
+Endpoint to train the Iris classification model and save it.
+
+This endpoint loads the training data (`X_train` and `y_train`) from CSV files,
+retrieves the model parameters from a JSON configuration file, trains a logistic regression
+model, and saves the trained model to a specified directory.
+
+Args:   
+    None
+
+Returns:
+    dict: A dictionary containing a success message and the path to the saved model.
+
+Raises:
+    HTTPException: If any file is not found (404) or if any other error occurs (500).
+"""
     try:
         output_dir = r"TP2 and  3\services\epf-flower-data-science\src\models"
         X_train_path = r"TP2 and  3\services\epf-flower-data-science\src\data\Iris\X_train.csv"
@@ -199,6 +263,22 @@ async def predict_iris():
 # Step 14: Retrieve parameters from Firestore
 @router.get("/get-model-parameters", response_model=Dict[str, Any])
 async def get_model_parameters():
+    """
+Endpoint to make predictions with the trained Iris classification model.
+
+This endpoint loads the trained logistic regression model from a `.joblib` file,
+loads the test dataset (`X_test`) from a CSV file, makes predictions, and returns
+the predictions as a JSON object.
+
+Args:
+    None
+
+Returns:
+    dict: A dictionary containing the predictions in a list.
+
+Raises:
+    HTTPException: If the model or test dataset is not found (404) or if any other error occurs (500).
+"""
     try:
         db = firestore.client()
 
@@ -221,6 +301,22 @@ async def get_model_parameters():
 
 @router.post("/update-model-parameters", response_model=Dict[str, Any])
 async def update_model_parameters(parameters: Dict[str, Any]):
+    """
+    Endpoint to update model parameters in Firestore.
+
+    This endpoint takes a dictionary of new parameters and updates the 'parameters' document
+    in the Firestore database. It then retrieves and returns the updated parameters.
+
+    Args:
+        parameters (Dict[str, Any]): A dictionary containing the new model parameters to be updated.
+
+    Returns:
+        Dict[str, Any]: A dictionary with a success message and the updated parameters retrieved 
+                        from the Firestore database.
+
+    Raises:
+        HTTPException: If an error occurs during the update process (500 status code).
+    """
     try:
         db = firestore.client()
 
@@ -237,6 +333,23 @@ async def update_model_parameters(parameters: Dict[str, Any]):
 
 @router.post("/add-model-parameters", response_model=Dict[str, Any])
 async def add_model_parameters(parameters: Dict[str, Any]):
+    """
+    Endpoint to add model parameters to Firestore.
+
+    This endpoint takes a dictionary of model parameters and adds them to the 'parameters' document
+    in Firestore. If the document already exists, the new parameters will be merged with the existing ones.
+
+    Args:
+        parameters (Dict[str, Any]): A dictionary containing the model parameters to be added.
+
+    Returns:
+        Dict[str, Any]: A dictionary with a success message and the updated parameters retrieved 
+                        from the Firestore database.
+
+    Raises:
+        HTTPException: If an error occurs during the adding process (500 status code).
+    """
+    
     try:
         db = firestore.client()
 
